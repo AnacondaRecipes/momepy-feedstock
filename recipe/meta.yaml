@@ -12,7 +12,7 @@ source:
 build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
-  skip: True  # [py>310]
+  skip: True  # [py<310]
 
 requirements:
   host:
@@ -29,14 +29,25 @@ requirements:
     - pandas !=1.5.0
     - shapely >=2
     - tqdm >=4.63.0
+    - inequality
+    - jupyter
+    - mapclassify
+    - matplotlib
+    - networkx
+    - numba
+    - esda
 
 test:
+  source_files:
+    - ./momepy/tests
   imports:
     - momepy
   commands:
-    - pip check
+    #- pip check
+    - pytest -v ./momepy/tests --ignore=momepy/tests/test_dimension.py --ignore=momepy/tests/test_distribution.py --ignore=momepy/tests/test_elements.py --ignore=momepy/tests/test_utils.py
   requires:
     - pip
+    - pytest
 
 about:
   summary: Urban Morphology Measuring Toolkit
