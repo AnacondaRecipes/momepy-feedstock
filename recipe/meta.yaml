@@ -12,7 +12,7 @@ source:
 build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
-  skip: True  # [py<310]
+  skip: True  # [py<310 or s390x]
 
 requirements:
   host:
@@ -43,7 +43,7 @@ test:
   imports:
     - momepy
   commands:
-    #- pip check
+    - pip check
     - pytest -v ./momepy/tests --ignore=momepy/tests/test_dimension.py --ignore=momepy/tests/test_distribution.py --ignore=momepy/tests/test_elements.py --ignore=momepy/tests/test_utils.py
   requires:
     - pip
