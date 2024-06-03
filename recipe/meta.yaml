@@ -39,7 +39,12 @@ test:
     - momepy
   commands:
     - pip check
-    - pytest -v ./momepy/tests --ignore=momepy/tests/test_dimension.py --ignore=momepy/tests/test_distribution.py --ignore=momepy/tests/test_elements.py --ignore=momepy/tests/test_utils.py
+    # Reason for ignores:
+    #   AssertionErrors for test_dimension.py::TestDimensions::test_StreetProfile,
+    #   test_distribution.py::TestDistribution::test_Alignment,
+    #   test_elements.py::TestElements::test_get_network_ratio.
+    #   KeyError for /test_utils.py::TestUtils::test_gdf_to_nx
+    - pytest -v ./momepy/tests --ignore=momepy/tests/test_dimension.py --ignore=momepy/tests/test_distribution.py  --ignore=momepy/tests/test_utils.py
   requires:
     - pip
     - pytest
@@ -47,7 +52,6 @@ test:
     - jupyter
     - mapclassify
     - matplotlib
-    - networkx
     - numba
     - esda
 
