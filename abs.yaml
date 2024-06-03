@@ -1,2 +1,4 @@
 channels:
   - https://staging.continuum.io/prefect/fs/libpysal-feedstock/pr5/9ad9705
+upload_channels:
+  - sfe1ed40
