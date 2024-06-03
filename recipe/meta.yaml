@@ -30,13 +30,7 @@ requirements:
     - pandas !=1.5.0
     - shapely >=2
     - tqdm >=4.63.0
-    - inequality
-    - jupyter
-    - mapclassify
-    - matplotlib
-    - networkx
-    - numba
-    - esda
+
 
 test:
   source_files:
@@ -49,6 +43,13 @@ test:
   requires:
     - pip
     - pytest
+    - inequality
+    - jupyter
+    - mapclassify
+    - matplotlib
+    - networkx
+    - numba
+    - esda
 
 about:
   home: https://github.com/pysal/momepy
