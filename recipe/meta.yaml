@@ -51,7 +51,7 @@ test:
     - inequality
     - jupyter
     - mapclassify
-    - matplotlib
+    - matplotlib-base
     - numba
     - esda
 
