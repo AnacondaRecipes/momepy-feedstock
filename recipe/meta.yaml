@@ -17,20 +17,20 @@ build:
 requirements:
   host:
     - python
+    - pip
     - setuptools >=61.0
     - setuptools-scm >=6.2
-    - pip
+    - toml
     - wheel
   run:
     - python
-    - geopandas >=0.12.0
-    - libpysal >=4.6.0
-    - networkx >=2.7
-    - packaging
-    - pandas !=1.5.0
+    - geopandas >=0.14.0
+    - libpysal >=4.12.0
+    - networkx >=3.2
+    - packaging 
+    - pandas >=2.0
     - shapely >=2
-    - tqdm >=4.63.0
-
+    - tqdm >=4.65
 
 test:
   source_files:
