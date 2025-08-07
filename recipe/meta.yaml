@@ -1,5 +1,5 @@
 {% set name = "momepy" %}
-{% set version = "0.7.0" %}
+{% set version = "0.10.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,56 +7,49 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/momepy-{{ version }}.tar.gz
-  sha256: 413ed9221dc4b2190621f8cb37789f09ea882f7e81dfbffd5731a22da6e61bab
+  sha256: d7b62de1ee420518491ce3cd2bc21815a149cc2a5e6132f122486e8542a74248
 
 build:
-  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<311]
   number: 0
-  skip: True  # [py<310 or s390x]
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
 requirements:
   host:
     - python
+    - pip
     - setuptools >=61.0
     - setuptools-scm >=6.2
-    - pip
+    - toml
     - wheel
   run:
     - python
-    - geopandas >=0.12.0
-    - libpysal >=4.6.0
-    - networkx >=2.7
-    - packaging
-    - pandas !=1.5.0
+    - geopandas >=0.14.0
+    - libpysal >=4.12.0
+    - networkx >=3.2
+    - packaging 
+    - pandas >=2.0
     - shapely >=2
-    - tqdm >=4.63.0
-
+    - tqdm >=4.65
 
 test:
   source_files:
-    - ./momepy/tests
+    - momepy/tests
   imports:
     - momepy
   commands:
     - pip check
-    # Reason for ignores:
-    #   AssertionErrors for test_dimension.py::TestDimensions::test_StreetProfile,
-    #   test_distribution.py::TestDistribution::test_Alignment,
-    #   test_elements.py::TestElements::test_get_network_ratio.
-    #   KeyError for /test_utils.py::TestUtils::test_gdf_to_nx
-    - pytest -v ./momepy/tests --ignore=momepy/tests/test_dimension.py --ignore=momepy/tests/test_distribution.py --ignore=momepy/tests/test_elements.py --ignore=momepy/tests/test_utils.py
+    - pytest -vv momepy/tests
   requires:
     - pip
     - pytest
     - inequality
-    - jupyter
     - mapclassify
-    - matplotlib-base
     - numba
     - esda
 
 about:
-  home: https://github.com/pysal/momepy
+  home: https://docs.momepy.org
   summary: Urban Morphology Measuring Toolkit
   description: |
     Momepy is a library for quantitative analysis of urban form - urban morphometrics. 
@@ -65,7 +58,7 @@ about:
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE
-  doc_url: https://docs.momepy.org/
+  doc_url: https://docs.momepy.org
   dev_url: https://github.com/pysal/momepy
 
 extra:
