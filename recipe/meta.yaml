@@ -32,19 +32,23 @@ requirements:
     - shapely >=2
     - tqdm >=4.65
 
+{% set skip_tests = "" %}
+
+# AssertionErrors:
+{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_dimension.py" %}
+{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_distribution.py" %}
+{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_elements.py" %}
+# KeyError:
+{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_utils.py" %}
+
 test:
   source_files:
-    - ./momepy/tests
+    - momepy/tests
   imports:
     - momepy
   commands:
     - pip check
-    # Reason for ignores:
-    #   AssertionErrors for test_dimension.py::TestDimensions::test_StreetProfile,
-    #   test_distribution.py::TestDistribution::test_Alignment,
-    #   test_elements.py::TestElements::test_get_network_ratio.
-    #   KeyError for /test_utils.py::TestUtils::test_gdf_to_nx
-    - pytest -v ./momepy/tests --ignore=momepy/tests/test_dimension.py --ignore=momepy/tests/test_distribution.py --ignore=momepy/tests/test_elements.py --ignore=momepy/tests/test_utils.py
+    - pytest -vv {{ skip_tests }} momepy/tests
   requires:
     - pip
     - pytest
