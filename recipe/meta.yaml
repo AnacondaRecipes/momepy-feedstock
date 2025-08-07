@@ -32,11 +32,6 @@ requirements:
     - shapely >=2
     - tqdm >=4.65
 
-{% set skip_tests = "" %}
-
-# KeyError:
-{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_utils.py" %}
-
 test:
   source_files:
     - momepy/tests
@@ -44,7 +39,7 @@ test:
     - momepy
   commands:
     - pip check
-    - pytest -vv {{ skip_tests }} momepy/tests
+    - pytest -vv momepy/tests
   requires:
     - pip
     - pytest
