@@ -44,9 +44,7 @@ test:
     - pip
     - pytest
     - inequality
-    - jupyter
     - mapclassify
-    - matplotlib-base
     - numba
     - esda
 
