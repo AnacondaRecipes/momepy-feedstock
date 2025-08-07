@@ -34,10 +34,6 @@ requirements:
 
 {% set skip_tests = "" %}
 
-# AssertionErrors:
-{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_dimension.py" %}
-{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_distribution.py" %}
-{% set skip_tests = skip_tests + " --ignore=momepy/tests/test_elements.py" %}
 # KeyError:
 {% set skip_tests = skip_tests + " --ignore=momepy/tests/test_utils.py" %}
 
