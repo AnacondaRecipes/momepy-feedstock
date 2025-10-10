@@ -1,5 +1,5 @@
 {% set name = "momepy" %}
-{% set version = "0.10.0" %}
+{% set version = "0.7.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,10 +7,17 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/momepy-{{ version }}.tar.gz
-  sha256: d7b62de1ee420518491ce3cd2bc21815a149cc2a5e6132f122486e8542a74248
+  sha256: 413ed9221dc4b2190621f8cb37789f09ea882f7e81dfbffd5731a22da6e61bab
+  patches:
+    - patches/numpy2_fix.patch
+    # Test contains incorrect dependency version check condition and precision tolerance.
+    - patches/fix_test_alignment.patch
+    # Changes package's usage of geopandas' deprecated query_bulk() API with query(), removed in geopandas>=1.0.
+    # Can be uncommented to release the upper bound constraint on geopandas
+    #- patches/change_query_bulk_to_query.patch
 
 build:
-  skip: true  # [py<311]
+  skip: true  # [py<310]
   number: 0
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
 
@@ -24,13 +31,20 @@ requirements:
     - wheel
   run:
     - python
-    - geopandas >=0.14.0
-    - libpysal >=4.12.0
-    - networkx >=3.2
+    # Added upper bound as the package uses an API removed in geopandas 1.0. Upper bound can be lifted
+    # with the change_query_bulk_to_query patch.
+    - geopandas >=0.12.0,<1.0
+    - libpysal >=4.6.0
+    - networkx >=2.7
     - packaging 
-    - pandas >=2.0
+    - pandas !=1.5.0
     - shapely >=2
-    - tqdm >=4.65
+    - tqdm >=4.63.0
+
+  run_constrained:
+    # geopandas file io APIs uses fiona.path in tests, removed from fiona 1.10. while these are only used
+    # by test, it is indicative of the environment expectation from the project at this point.
+    - fiona <1.10
 
 test:
   source_files:
