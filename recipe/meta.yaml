@@ -41,11 +41,6 @@ requirements:
     - shapely >=2
     - tqdm >=4.63.0
 
-  run_constrained:
-    # geopandas file io APIs uses fiona.path in tests, removed from fiona 1.10. while these are only used
-    # by test, it is indicative of the environment expectation from the project at this point.
-    - fiona <1.10
-
 test:
   source_files:
     - momepy/tests
@@ -53,7 +48,8 @@ test:
     - momepy
   commands:
     - pip check
-    - pytest -vv momepy/tests
+    # skip tests for 3.13, as we don't have the required test dependency fiona<1.10 available for it.
+    - pytest -vv momepy/tests  # [py<313]
   requires:
     - pip
     - pytest
@@ -61,6 +57,8 @@ test:
     - mapclassify
     - numba
     - esda
+    # geopandas file-io APIs uses fiona.path in tests, removed from fiona 1.10.
+    - fiona <1.10  # [py<313]
 
 about:
   home: https://docs.momepy.org
