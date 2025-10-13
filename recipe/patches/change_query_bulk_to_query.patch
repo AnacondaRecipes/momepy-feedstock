@@ -1,0 +1,79 @@
+diff --git a/momepy/distribution.py b/momepy/distribution.py
+index 13f4c79..01f78c5 100644
+--- a/momepy/distribution.py
++++ b/momepy/distribution.py
+@@ -134,7 +134,7 @@ class SharedWalls:
+     def __init__(self, gdf):
+         self.gdf = gdf
+ 
+-        inp, res = gdf.sindex.query_bulk(gdf.geometry, predicate="intersects")
++        inp, res = gdf.sindex.query(gdf.geometry, predicate="intersects")
+         left = gdf.geometry.take(inp).reset_index(drop=True)
+         right = gdf.geometry.take(res).reset_index(drop=True)
+         intersections = left.intersection(right).length
+@@ -689,7 +689,7 @@ class NeighboringStreetOrientationDeviation:
+         self.gdf = gdf
+         self.orientation = gdf.geometry.apply(self._orient)
+ 
+-        inp, res = gdf.sindex.query_bulk(gdf.geometry, predicate="intersects")
++        inp, res = gdf.sindex.query(gdf.geometry, predicate="intersects")
+         itself = inp == res
+         inp = inp[~itself]
+         res = res[~itself]
+diff --git a/momepy/elements.py b/momepy/elements.py
+index 0d56795..2a43e0f 100644
+--- a/momepy/elements.py
++++ b/momepy/elements.py
+@@ -448,7 +448,7 @@ class Tessellation:
+         enclosures["position"] = range(len(enclosures))
+ 
+         # determine which polygons should be split
+-        inp, res = buildings.sindex.query_bulk(
++        inp, res = buildings.sindex.query(
+             enclosures.geometry, predicate="intersects"
+         )
+         unique, counts = np.unique(inp, return_counts=True)
+@@ -998,7 +998,7 @@ def enclosures(
+             )
+         additional = pd.concat([gdf.geometry for gdf in additional_barriers])
+ 
+-        inp, res = enclosures.sindex.query_bulk(
++        inp, res = enclosures.sindex.query(
+             additional.geometry, predicate="intersects"
+         )
+         unique = np.unique(res)
+@@ -1042,7 +1042,7 @@ def enclosures(
+                 "`limit` requires a GeoDataFrame or GeoSeries with Polygon or "
+                 "MultiPolygon geometry to be used with `clip=True`."
+             )
+-        _, encl_index = final_enclosures.representative_point().sindex.query_bulk(
++        _, encl_index = final_enclosures.representative_point().sindex.query(
+             limit.geometry, predicate="contains"
+         )
+         keep = np.unique(encl_index)
+diff --git a/momepy/preprocessing.py b/momepy/preprocessing.py
+index b72638e..70d6580 100644
+--- a/momepy/preprocessing.py
++++ b/momepy/preprocessing.py
+@@ -851,7 +851,7 @@ def _selecting_incoming_lines(rab_multipolygons, edges, angle_threshold=0):
+     """
+     # selecting the lines that are touching but not covered by
+     touching = gpd.sjoin(edges, rab_multipolygons, predicate="touches")
+-    edges_idx, rabs_idx = rab_multipolygons.sindex.query_bulk(
++    edges_idx, rabs_idx = rab_multipolygons.sindex.query(
+         edges.geometry, predicate="covered_by"
+     )
+     idx_drop = edges.index.take(edges_idx)
+diff --git a/momepy/tests/test_elements.py b/momepy/tests/test_elements.py
+index aa7791d..873b370 100644
+--- a/momepy/tests/test_elements.py
++++ b/momepy/tests/test_elements.py
+@@ -135,7 +135,7 @@ class TestElements:
+         assert not blocks.buildings_id.isna().any()
+         assert len(blocks.blocks) == 9
+         assert (
+-            len(blocks.blocks.sindex.query_bulk(blocks.blocks.geometry, "overlaps")[0])
++            len(blocks.blocks.sindex.query(blocks.blocks.geometry, "overlaps")[0])
+             == 0
+         )
+ 
