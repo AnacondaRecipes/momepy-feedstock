@@ -21,6 +21,7 @@ requirements:
     - setuptools >=61.0
     - setuptools-scm >=6.2
     - toml
+    - wheel
   run:
     - python
     - geopandas >=0.14.0
@@ -31,6 +32,9 @@ requirements:
     - shapely >=2
     - tqdm >=4.65
 
+# E   ModuleNotFoundError: No module named 'neatnet'
+{% set ignore_tests = "--ignore=momepy/tests/test_continuity.py" %}
+
 test:
   source_files:
     - momepy/tests
@@ -38,7 +42,7 @@ test:
     - momepy
   commands:
     - pip check
-    - pytest -vv momepy/tests
+    - pytest -vv momepy/tests {{ ignore_tests }}
   requires:
     - pip
     - pytest
